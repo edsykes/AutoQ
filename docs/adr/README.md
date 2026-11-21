@@ -45,3 +45,4 @@ What this makes easier or harder, and how to reverse it.
 | ADR | Title | Status | Ticket |
 |---|---|---|---|
 | [0011](0011-autonomous-build-decisions-are-logged-as-adrs.md) | Autonomous build decisions are logged as ADRs | accepted | n/a |
+| [0004](0004-ontology-representation-and-fuzzy-commit-model.md) | Ontology representation and fuzzy commit model | accepted | #8 |
