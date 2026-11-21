@@ -44,5 +44,8 @@ What this makes easier or harder, and how to reverse it.
 
 | ADR | Title | Status | Ticket |
 |---|---|---|---|
+| [0003](0003-lake-engine-table-format-catalogue-and-lineage-store.md) | Lake engine, table format, catalogue and lineage store | accepted | #7 |
+| [0008](0008-stable-core-and-migration-path.md) | Stable core and migration path | accepted | #7 |
+| [0009](0009-open-formats-openlineage-prov-o-ontology-export.md) | Open formats: OpenLineage, PROV-O, ontology export | accepted | #7 |
 | [0011](0011-autonomous-build-decisions-are-logged-as-adrs.md) | Autonomous build decisions are logged as ADRs | accepted | n/a |
 | [0004](0004-ontology-representation-and-fuzzy-commit-model.md) | Ontology representation and fuzzy commit model | accepted | #8 |
