@@ -49,3 +49,4 @@ What this makes easier or harder, and how to reverse it.
 | [0009](0009-open-formats-openlineage-prov-o-ontology-export.md) | Open formats: OpenLineage, PROV-O, ontology export | accepted | #7 |
 | [0011](0011-autonomous-build-decisions-are-logged-as-adrs.md) | Autonomous build decisions are logged as ADRs | accepted | n/a |
 | [0004](0004-ontology-representation-and-fuzzy-commit-model.md) | Ontology representation and fuzzy commit model | accepted | #8 |
+| [0012](0012-world-generator-is-a-stdlib-python-package-under-world.md) | World generator is a stdlib-only Python package under `world/` | accepted | #10 |
