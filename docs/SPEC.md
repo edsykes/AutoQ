@@ -1,8 +1,30 @@
-# AutoQ — Specification (v1 spine, draft 3)
+# AutoQ — Specification (v1 spine, draft 4)
 
-Status: DRAFT for review · 2026-11-19 · Owner: Ed Heretsch (GitHub: edsykes) · Licence: Apache-2.0
+Status: DRAFT for review · 2026-11-20 · Owner: Ed Heretsch (GitHub: edsykes) · Licence: Apache-2.0
+Base: draft 3. This draft applies the decisions of the 2026-11-20 grilling round (Q1–Q31). It replaces draft 3 and is the version published in issue #1.
 Vocabulary: [GLOSSARY.md](../GLOSSARY.md) · Later versions: [ROADMAP.md](ROADMAP.md) · Work: [BACKLOG.md](BACKLOG.md)
-Source: the talk "The exponential data organisation" (Data Berlin, 3 Nov 2026), and the architecture grilling session of 2026-11-19 (decisions recorded below as D-numbers where useful).
+Source: the talk "The exponential data organisation" (Data Berlin, 3 Nov 2026), the architecture grilling of 2026-11-19, and the gap-closing grilling of 2026-11-20.
+
+## Change log (draft 3 → draft 4)
+
+| Area | Change | Decision |
+|---|---|---|
+| Values | Default values and indicators are seeded in v1 and claims link to them; the Values Authority commit workflow moves to v1.1 | Q1 |
+| Evals | v1 has Dev and Promotion sets only; Sealed moves to v2; set sizes defined | Q2, Q21 |
+| World model | All four drivers are planted; v1 asserts price and duplicate invoices; FX and mix assertions move to v1.1 | Q3 |
+| World model | Each sim is a lossy, convention-skewed view of one world model; org politics shown as per-department definitions | Q8 |
+| Escalation | v1 reminds, then re-routes to the operator; delegates and the full chain move to v1.2 | Q4 |
+| Follow-ups | v1 has a thin Follow-up Agent to the asker's own authority; Dialogue Agent and multi-level routing move to v1.2 | Q5 |
+| Intent | v1 Intent Record is a plain record; ontology purpose partition moves to v1.2 | Q6 |
+| Conflicts and review | v1 detects and flags data artefacts and reviewers disposition counter-claims by hand; remediation rules and agent triage move to v1.1 | Q7 |
+| Flywheel | Baseline v0 defined as the first-built thin agents, frozen, with one seeded deficiency | Q9 |
+| Stewards | Domain data stewards and a meaning steward defined; v1 folds data steward duties into the Quality Agent | Q10 |
+| Hosting | Hosted instance takes only the visitor's own session key | Q11 |
+| Roles | Eight roles; Board is the top of the Exec role; Values Authority is exec or board level | Q12 |
+| Acceptance | Answer-key tolerance, compounding criterion and definition of done quantified | Q13, Q14, Q19 |
+| Governance | Operator approves stable-core changes; blocked-mission rule; replay and retention meanings | Q15, Q16, Q17, Q22 |
+| Non-functional | No latency, scale or availability targets in v1 | Q18 |
+| Traceability | Tickets list the stories and scenarios they satisfy | Q20 |
 
 ---
 
@@ -23,7 +45,7 @@ Classic data architecture (load everything, model it in advance as Kimball, vaul
 3. **Stores only what earns its place, in a structure that emerges.** The durable asset is the governed *definition*; data is a rebuildable materialisation. The system mandates a machine-managed **contract** on every stored model, not a modelling shape.
 
 ### Principles
-1. Start from the question and the decision it informs; capture *why* it is asked, in the ontology.
+1. Start from the question and the decision it informs; capture *why* it is asked.
 2. Humans hold authority over questions, meaning and values; agents steward everything below that.
 3. Resolve before create; change as little as possible.
 4. Retain learning as structured, verifiable, replayable records.
@@ -34,54 +56,63 @@ Classic data architecture (load everything, model it in advance as Kimball, vaul
 
 ## User Stories
 
+Markers show the version in which a story is delivered. Unmarked stories are v1.
+
 **Exec**
+
 1. As an exec, I want to ask a business question in my own words and state the decision it informs, so that the answer targets what I must decide.
 2. As an exec, I want to see how my question broke down into VP and analyst questions and which are answered, open or low-confidence, so that I know how far to rely on the whole.
 3. As an exec, I want a decision-level brief with confidence, the meanings assumed, and the company values the facts bear on, so that I can act without reading analysis.
-4. As an exec, I want follow-up questions to reach the level that can decide whether to pursue them, so that I am not asked about detail.
+4. As an exec, I want follow-up questions proposed to the governance authority that can decide whether to pursue them, so that I am not asked about detail. *(v1: proposed to the asker's own authority; routing to the lowest covering level is v1.2)*
 5. As an exec, I want to record the decision I took and later its outcome, so that the system learns what mattered.
 6. As an exec, I want to see that the system answers related questions faster and cheaper over time, so that I can judge the investment.
 
 **VP / Analyst**
+
 7. As a VP, I want to own the sub-questions in my domain and edit, reject or split them, so that they reflect how my domain works.
 8. As a VP or analyst, I want to review only the claims about my domain, including claims made by other domains about mine, so that I am accountable for what is said about my area and nothing else.
-9. As a reviewer, I want to bring a counter-claim based on evidence not connected at fact level and see it tested, included, rejected or deferred with reasons, so that human knowledge enters the story honestly.
+9. As a reviewer, I want to bring a counter-claim based on evidence not connected at fact level and have it dispositioned as included, rejected or deferred with reasons, so that human knowledge enters the story honestly. *(v1: the reviewer of record dispositions it by hand; agent triage and test sub-missions are v1.1)*
 10. As a reviewer, I want to propose a counter-story, add or amend a check, challenge a reconciliation, and re-weight claims, so that I can steer Verify.
 11. As an analyst, I want facts, SQL and lineage behind every claim, so that I can verify and reuse them.
 12. As an analyst, I want agents to ask me targeted questions instead of guessing, and my corrections retained, so that I do not repeat myself.
 13. As a VP, I want to be told when my department's definition differs from another's, so that I can influence the reconciliation.
-14. As an asker, I want to question the answer in dialogue and have questions become tracked questions with their own intent, so that nothing I wondered is lost.
+14. As an asker, I want to question the answer in dialogue and have questions become tracked questions with their own intent, so that nothing I wondered is lost. *(v1.2)*
 
 **Authorities**
+
 15. As a Question Governance Authority, I want a queue of proposed breakdowns and follow-ups with estimated cost, availability and ambiguity, so that I decide what is worth answering.
 16. As a Question Governance Authority, I want decisions retained as precedent and declined follow-ups remembered, so that the same question is not re-proposed without new information.
 17. As a Meaning Authority, I want a workbench of semantic conflicts with options, evidence and example records, so that I resolve meaning deliberately (reconcile, keep distinct, defer).
 18. As a Meaning Authority, I want agents to spawn meaning missions when a concept is missing or in conflict, so that ontology work is tracked and measured like other work.
-19. As a Meaning Authority, I want a sensitivity check showing how much an answer changes under each candidate meaning, so that I focus on conflicts that matter.
-20. As a Values Authority, I want a governed Values Register with indicators and sensible defaults, so that stories can be tied to what the company values.
-21. As any authority, I want delegates and time-limited escalation so that queues do not stall, without anything being decided in my place.
+19. As a Meaning Authority, I want a sensitivity check showing how much an answer changes under each candidate meaning, so that I focus on conflicts that matter. *(v1.1)*
+20. As a Values Authority, I want a governed Values Register with indicators and sensible defaults, so that stories can be tied to what the company values. *(v1: default values and indicators are seeded and claims link to them; the commit workflow for changing them is v1.1)*
+21. As any authority, I want delegates and time-limited escalation so that queues do not stall, without anything being decided in my place. *(v1: reminder, then re-route to the operator; delegates and the full chain are v1.2)*
 22. As a Mission Approver, I want to see each mission contract, its estimated cost and risk, and which policy routed it, so that I approve with confidence.
 
 **Operator**
+
 23. As an operator, I want any LLM provider (frontier or local) with my own key, so that I am not locked in.
 24. As an operator, I want per-mission and per-day spend caps, an immutable audit ledger and a kill switch, so that autonomy stays bounded.
 25. As an operator, I want to see storage space and cost, by snapshot, zone and model, so that I can manage them.
 26. As an operator, I want a lineage view for any graph in the product, so that I can trace any answer, claim, assertion, model, agent change or question to its origin.
-27. As an operator, I want one-command spin-up and a hosted instance, so that evaluation takes minutes.
+27. As an operator, I want one-command spin-up and a hosted instance that runs only on a visitor's own key, so that evaluation takes minutes and costs me nothing per visit.
+27a. As an operator, I want to approve any change to the stable core and have it logged and replay-tested first, so that the foundations never shift unnoticed.
 
 **Builder and flywheel**
+
 28. As the Builder, I want every agent and human handoff recorded with decision, rationale, alternatives and downstream outcome, so that I can find where work goes wrong.
 29. As the Builder, I want a fixed friction taxonomy to mine, so that improvements target real problems.
 30. As the Builder, I want to choose the smallest effective change and estimate its blast radius first, so that changes stay small and reversible.
 31. As the Builder, I want each change to state a hypothesis that is measured after promotion, so that compounding is visible per change.
-32. As an auditor, I want eval sets the Builder cannot see or alter, so that improvement is not overfit.
+32. As an auditor, I want eval sets the Builder cannot see or alter, so that improvement is not overfit. *(v1: Promotion is hidden from the Builder; the Sealed set is v2)*
 33. As a stakeholder, I want four defined compounding metrics against a frozen baseline, so that nobody can game them quietly.
 
 **Data and assets**
+
 34. As an analyst, I want Discover to go straight to sources, profile them read-only, and reuse profiles across missions, so that findings are fresh and cheap.
 35. As an agent, I want every stored model to carry a machine-readable contract (definition, grain, entity-bound keys, concept-bound measures, lineage, checks, status, steward, sensitivity, economics), so that I can decide to reuse, rebuild, retain or evict it without a human.
 36. As a data consumer, I want models to join through ontology entities and governed identity links, so that data from different systems connects.
-37. As a steward agent, I want remediation rules as governed, versioned definitions applied only inside the lake, so that data defects are fixed without touching sources.
+37. As a steward agent, I want remediation rules as governed, versioned definitions applied only inside the lake, so that data defects are fixed without touching sources. *(v1.1; in v1 defects are detected and flagged, not fixed)*
 38. As a reviewer, I want old answers annotated when the meaning they used has changed, and a human-triggered rebuild to create a new version of the question, so that history stays intact.
 39. As a developer, I want a public Apache-2.0 repository, docs and CI, so that I can run and extend it.
 40. As a presenter, I want a scripted scenario demonstrating cascade, meaning conflict, review and measurable improvement, so that the product can be shown live.
@@ -91,20 +122,21 @@ Classic data architecture (load everything, model it in advance as Kimball, vaul
 ## Implementation Decisions
 
 ### 1. Scope
-v1 is the **spine**: one thin pass through every idea. The full architecture below is the target; items marked *(v1.1/v1.2/v2)* are designed in, not built. See ROADMAP.md.
+v1 is the **spine**: one thin pass through every idea. The full architecture below is the target; items marked *(v1.1/v1.2/v2)* are designed in, not built. See ROADMAP.md and the table of deferrals in Further Notes.
 
 ### 2. Humans and authority
-Seven roles: Exec, VP, Analyst (askers/reviewers); four authorities — **Question Governance** (inquiry and purpose), **Meaning**, **Values**, **Mission Approver** — and **Operator**. Roles may be scoped to a domain (Procurement, Finance, Plants). Each authority has named delegates and a time-limited escalation chain (delegate → authority above → operator). On timeout agents only **remind, re-route and prepare a summary**; nothing is decided in a human's place (**D: no proxy decisions**). Wait time is recorded as human effort. Where two authorities disagree, the Question Governance Authority arbitrates and the case is recorded. v1 identity: local users with roles and seeded personas; OIDC later.
+Eight roles: **Exec** (the top level of askers, including Board), **VP**, **Analyst** (askers and reviewers); four authorities — **Question Governance** (inquiry and purpose), **Meaning**, **Values** (exec or board level) and **Mission Approver**; and **Operator**. Roles may be scoped to a domain (Procurement, Finance, Plants). Authorities have named delegates and a time-limited escalation chain (delegate → authority above → operator) *(v1.2)*. **v1** has a single escalation step: when a queue item times out, agents **remind the assignee, then re-route to the operator** and prepare a summary.
+**No proxy decisions:** on timeout agents only remind, re-route and summarise; nothing is decided in a human's place. A mission waiting on a human stays `blocked_on_human` with **no automatic expiry**; reminders are sent at 24 and 72 hours; **no budget is consumed while blocked**; the operator may cancel it. Wait time is recorded as human effort. Where two authorities disagree, the Question Governance Authority arbitrates and the case is recorded. v1 identity: local users with roles and seeded personas; OIDC later.
 
 ### 3. Domain model
 - **Question** (text, intent link, parent, version, status) forming a **Question Tree** (exec → VP → analyst leaf). Status: `draft → proposed → accepted | rejected | rework → in_progress → answered → closed`. A human-triggered rebuild creates **question version n+1** (§12).
-- **Intent Record** (decision, stakes, audience, constraints) linked to a question; an instance linking into the ontology's purpose partition (§8).
+- **Intent Record** (decision, stakes, audience, constraints) linked to a question. In v1 it is a **plain record** attached to the question; linking it into the ontology's purpose partition (§8) is v1.2.
 - **Need Spec** (§6): the governed definitions a question needs, in ontology terms.
 - **Mission** with a **Mission Contract** (goal, Need Spec, inputs, acceptance checks, budget, risk class, approver, assigned agent versions). Missions have **sub-missions** that each change exactly one governed asset (§7). Mission types: *answer mission* and *meaning mission* (§8). Lifecycle: `proposed → awaiting_approval → approved → running ⇄ blocked_on_human → verifying → completed | failed | cancelled | halted`.
-- **Handoff** (§10), **Asset** (§5) and its **Contract**, **Concept / Assertion / Conflict Case** (§8), **Claim / Story / Counter-claim** (§11), **Answer** (immutable, versioned), **Decision Record**, **Agent / Skill / Tool / Check / Improvement Proposal / Hypothesis / Eval Suite / Promotion** (§12), **Ledger Entry** (append-only, hash-chained).
+- **Handoff** (§10), **Asset** (§5) and its **Contract**, **Concept / Assertion / Conflict Case** (§8), **Claim / Story / Counter-claim** (§11), **Answer** (immutable, versioned), **Decision Record**, **Agent / Skill / Tool / Check / Improvement Proposal / Hypothesis / Eval Suite / Promotion** (§13), **Ledger Entry** (append-only, hash-chained).
 
 ### 4. The loop and its agents
-Each step is a LangGraph workflow of Google ADK agents with durable checkpoints, retries, human-wait states and loop-back edges. In v1 each step has **one thin agent**; the full role sets below are the target.
+Each step is a LangGraph workflow of Google ADK agents with durable checkpoints, retries, human-wait states and loop-back edges. In v1 each step has **one thin agent**; the full role sets below are the target *(v1.2)*.
 
 | Step | Roles (target) | Output |
 |---|---|---|
@@ -113,24 +145,27 @@ Each step is a LangGraph workflow of Google ADK agents with durable checkpoints,
 | **Clarify** | Concept Comparator; Sensitivity Analyser; Option Presenter; Resolution Applier; Meaning Steward | Conflict Cases, resolutions, meaning missions |
 | **Evidence** | Fact Designer; Lake Planner; Mapping Builder; Transformer; Quality Agent; Explanation Builder | Registered facts and candidate explanations |
 | **Verify** | Reconciler; Story Weaver; Counter-Story Generator; Claim Router; Review Facilitator; Confidence Assessor | Reviewed claim graph, confidence |
-| **Answer** | Communicator; Dialogue Agent; Commit Agent; Follow-up Agent | Immutable answer, follow-ups, decision-record request |
+| **Answer** | Communicator; Commit Agent; Follow-up Agent; Dialogue Agent *(v1.2)* | Immutable answer, proposed follow-ups, decision-record request |
+
+**Stewards.** Stewardship is agentic: one **data steward agent per domain** (Procurement, Finance, Plants) manages the models, quality, freshness, rebuilds and deprecation in its domain, and one **meaning steward agent** proposes ontology changes to the Meaning Authority. In v1 the data steward duties are **folded into the Evidence step's Quality Agent** and the meaning steward is the Clarify step's Meaning Steward; separate per-domain stewards are v1.2.
 
 Failure handling: bounded retries, then `blocked_on_human` with diagnosis; agent failures, timeouts and self-contradictions are recorded as friction. Estimate accuracy (predicted vs actual cost/time) is a friction signal.
 
 ### 5. Data architecture (the lake and its assets)
 **No prescribed modelling shape.** The system mandates a **contract**; Kimball, mesh, vault, event log, graph and others are patterns agents may choose and must justify.
 
-- **Retention by earned keep.** Everything begins as *scratch*, scoped to one mission. A model is *retained* if it earns its keep: a **retention score** blends expected reuse, rebuild savings and trust against carrying cost (re-check effort, staleness and conflict risk, discovery noise, reproducibility burden). The weights are an operator-owned, evaluated policy the Builder may propose to change. Overlapping models are **consolidated** (a better one supersedes). Storage size is not a retention criterion; *(v1.2)* implements scoring/eviction, v1 keeps everything.
+- **Retention by earned keep.** Everything begins as *scratch*, scoped to one mission. A model is *retained* if it earns its keep: a **retention score** blends expected reuse, rebuild savings and trust against carrying cost (re-check effort, staleness and conflict risk, discovery noise, reproducibility burden). The weights are an operator-owned, evaluated policy the Builder may propose to change. Overlapping models are **consolidated** (a better one supersedes). Storage size is not a retention criterion; *(v1.2)* implements scoring and eviction, v1 keeps everything.
 - **The durable asset is the definition.** A governed definition (measure or entity bound to ontology concepts, with grain, scope, version) is durable; its physical materialisation is a rebuildable cache.
 - **Landing.** Sources are never mirrored. Landing is minimal and per mission (only fields and rows the approved mapping needs), as immutable **as-of-stamped snapshots**. **All snapshots are kept by default**; operators can set an expiry policy, in which case answers whose snapshots expired become "not replayable" and leave the eval sets. An admin view shows storage space and cost per snapshot, zone and model.
-- **Reproducibility.** Every materialisation records source snapshot as-of, definition versions, mapping versions and agent versions. Every answer is replayable.
+- **Reproducibility.** Every materialisation records source snapshot as-of, definition versions, mapping versions and agent versions. Every answer is **replayable**, meaning that its **data, definitions and numbers reproduce exactly** from the recorded versions and snapshots. Agent wording and reasoning are not required to reproduce; CI replays use recorded cassettes.
 - **Contract** (machine-managed; agents write and read it; humans do not fill it in): definition reference and version; grain; keys bound to entities; measures bound to concepts and assertion versions; time semantics and freshness; lineage; declared checks and latest results; derived status; steward agent and policy ref; sensitivity; economics (rebuild cost, reuse count, last used); retention score. A model without a complete contract cannot leave scratch.
 - **Status** values: scratch, retained, trusted, stale, deprecated, quarantined. **Trust is derived mechanically**: every concept used is committed above threshold, checks pass, and a replay reproduces the model. No human signs off individual models.
 - **Lifecycle zones** (logical, mapped to locations by the Lake Adapter): *snapshots*, *scratch*, *retained*, *quarantine*. Zones follow contract status, never modelling shape.
 - **Connectivity.** Keys bind to ontology entities. **Identity links** (e.g. several vendor IDs = one Supplier) are governed definitions with confidence, produced by a **matching agent** (blocking → scoring by rules, similarity and an LLM judge on ambiguous pairs → policy bands: auto-commit high, human review of sampled/contested middle, reject low). Humans set thresholds and policy; they do not approve individual links. Cross-model joins go through entity bindings and identity links. *(v1: one entity — supplier; full matching bands v1.1.)*
 - **Engine.** One columnar engine behind a swappable **Lake Adapter**: DuckDB over Parquet, with a Postgres **snapshot catalogue** and contract store; open table formats compared in ADR-003. pgvector for similarity.
 - **Catalogue and lineage.** Contracts and an explicit lineage graph (asset → asset via transformation and version) live in Postgres as relational edges; impact analysis and replay are traversals. A graph database only if traversal becomes a bottleneck (ADR-003).
-- **Stable core vs changeable layout.** The **addressing scheme** (definition, version, snapshot), the **contract schema** and the **lineage format** are the stable core: versioned, migrated, and changed only through a human-approved path. Zone layout, retention weights and shape patterns are changeable policy the Builder may propose.
+- **Stable core vs changeable layout.** The **addressing scheme** (definition, version, snapshot), the **contract schema** and the **lineage format** are the stable core: versioned, migrated, and changed only through a **human-approved path in which the Operator approves**, the approval is written to the ledger, and the migration is replay-tested first. Zone layout, retention weights and shape patterns are changeable policy the Builder may propose.
+- **Retention of records.** The ledger and handoff records are **kept forever** in v1 (the data is synthetic and small); revisit when real data arrives.
 - **Open formats.** Data lineage as **OpenLineage** events with our contract fields as custom facets; provenance of assertions, answers and claims exportable as **W3C PROV-O**; ontology export in a standard form (ADR-004).
 - **Existing lakes** *(v1.1)*: AutoQ builds its own lake afresh and never writes elsewhere, but a pre-existing org lake may be read as a **fourth system of facts** through the connector interface. Trust is earned per lake model by Discover cross-referencing to primary sources (control totals, key coverage, freshness, lineage claims) and stored as assertions; each lake model gets a **reuse verdict** (reuse as-is / with adjustments / do not reuse) recorded in lineage; lake reuse counts toward lower rediscovery. Lake meaning (hierarchies, catalogue definitions, semantic-layer metrics) arrives only as *proposed* provenance-tagged lower-confidence assertions; hierarchies become versioned ontology relations.
 
@@ -142,57 +177,59 @@ When a near-match exists, choose by compatibility, ordered by smallest change: (
 **Smallest-change rule:** a sub-mission changes exactly one governed asset, has its own acceptance check, is independently verifiable and reversible, and fits one agent context. Blast radius is estimated before acting and the smallest option wins; larger changes are verified sequences. Change size is a tracked metric.
 
 ### 8. The ontology: meaning, purpose, values
-Three governed partitions: **Meaning** (concepts, relations, hierarchies, identity links — Meaning Authority), **Purpose** (decision types, stakes, stakeholders, initiatives; a question *informs* a decision that *serves* a value or initiative — Question Governance Authority), **Values** (register with indicators — Values Authority). Intent Records instantiate links into Purpose; missing items are proposed by agents and committed by the owning authority.
+Three governed partitions: **Meaning** (concepts, relations, hierarchies, identity links — Meaning Authority), **Purpose** (decision types, stakes, stakeholders, initiatives; a question *informs* a decision that *serves* a value or initiative — Question Governance Authority) *(v1.2; in v1 the Intent Record is a plain record)*, and **Values** (register with indicators — Values Authority). Missing items are proposed by agents and committed by the owning authority.
 - **Assertion**: statement, scope, confidence (0..1), status (`proposed / committed / contested / deprecated`), provenance, version.
 - **Commit Policy** per concept: authority, vote (role/domain-weighted, quorum, default threshold 0.7, contest limit 0.3) or evidence-weighted; hybrid configurable. *(v1: authority only; vote/evidence v1.1.)*
 - **Two layers of meaning.** The **source mapping layer** (what each source field or lake model means in ontology terms, with confidence) is high-volume and agent-governed; it escalates only when a mapping implies a meaning conflict. Humans govern the business ontology.
-- **Conflicts are typed.** *Semantic* (same word, different meanings) → Meaning Authority. *Factual* (same meaning, different numbers) → data owner as a quality finding; agents fix at data level with **remediation rules** (governed, versioned definitions applied in our lake with lineage, never edits to a source) that wait on a meaning mission if they depend on a meaning decision. Classification is itself evaluated.
+- **Conflicts are typed.** *Semantic* (same word, different meanings) → Meaning Authority. *Factual* (same meaning, different numbers) → data owner as a quality finding. **In v1 factual conflicts are detected and flagged, and not fixed.** *(v1.1:)* agents fix at data level with **remediation rules** (governed, versioned definitions applied in our lake with lineage, never edits to a source) that wait on a meaning mission if they depend on a meaning decision. Classification is itself evaluated.
 - **Meaning missions** are first-class missions: contract, Meaning Authority approver, own metrics. A **sensitivity check** measures how much an answer changes under each candidate meaning. Resolution rule: **auto-resolve and record** when a committed assertion applies with confidence above threshold; **provisional** (labelled assumption, meaning mission opened) when no committed meaning applies but the choice is immaterial; **block and escalate** when material or when the concept requires humans. *(v1: all conflicts that matter block for the Meaning Authority; sensitivity and provisional path v1.1.)*
-- **Values Register** with five default values and indicators (see §14).
+- **Values Register** with five default values and indicators (see §14). *(v1: seeded as committed data that claims can link to; the workflow by which the Values Authority changes them is v1.1.)*
 - Demo conflict **"spend"**: Procurement = committed PO value; Finance = posted invoice value net of credit notes; Plants = goods received value.
 
 ### 9. Questions, missions and approval
 1. Exec asks + intent. 2. Planner proposes the breakdown. 3. **Question Governance Authority** accepts, edits, rejects or sends back; decisions kept as precedent. 4. Leaf missions are planned as minimal sub-missions; an **approval policy** (rules over estimated cost, risk class, new ontology commitments, prior success) auto-approves or routes to a Mission Approver. 5. Agents run the loop; human items go to the right queue. 6. Answers roll up with confidence propagation.
-**Follow-ups** are routed to the lowest level whose intent covers them and whose authority can afford them; that level's governance authority decides whether to take another turn around the loop. Declines are retained so identical follow-ups are not re-proposed without new information.
+**Follow-ups.** *(v1)* A thin Follow-up Agent proposes follow-ups to the **asker's own** governance authority, who decides whether to take another turn around the loop. *(v1.2)* Follow-ups are routed to the lowest level whose intent covers them and whose authority can afford them. Declines are retained so identical follow-ups are not re-proposed without new information.
 
 ### 10. Interaction records (cross-cutting)
-All communication between agents, and between agents and humans, is a **typed, schema-defined handoff** with no side channels. Each handoff record: sender and receiver (agent version or human), purpose, payload reference, decision, rationale, alternatives considered, confidence, human intervention, and later-linked **downstream outcome** (used, corrected, rejected, ignored). Humans are actors like agents. Stored in Postgres alongside the ledger; OpenTelemetry spans carry cost and timing.
+All communication between agents, and between agents and humans, is a **typed, schema-defined handoff** with no side channels. Each handoff record: sender and receiver (agent version or human), purpose, payload reference, decision, rationale, alternatives considered, confidence, human intervention, and later-linked **downstream outcome** (used, corrected, rejected, ignored). Humans are actors like agents. Stored in Postgres alongside the ledger and kept forever (§5); OpenTelemetry spans carry cost and timing.
 
 ### 11. Verify, stories and review
 A **story is a claim graph**: each claim links to supporting facts (and so lineage) and, via indicators, to the values it bears on; the graph includes counter-stories considered and rejected. Prose is rendered from the graph per asker level. Claims citing a value without a supporting indicator are rejected. Claim types: *evidence-backed* and *human-asserted* (labelled with author and basis; never rendered as fact).
 **Review is always required.** Every concept belongs to a domain; each claim inherits the domains of the concepts it uses plus the question's domain; each subject domain's reviewer reviews it (so a claim about another domain needs that domain's reviewer). Each claim gets a disposition (approved / counter-claimed / rejected); an answer is released only when every claim has one; there is **no provisional release**.
 Human inputs in Verify (all recorded as handoffs): propose a counter-story, add or amend an acceptance check, challenge a reconciliation, raise counter-claims, re-weight claims.
-**Counter-claim**: author, statement, targeted claims, basis (unlinked evidence), why unlinked, proposed action; agent triage may spawn a test sub-mission; outcomes: *resolved by evidence*, *included* as qualified claim, *rejected*, *deferred*; adjudicated by the reviewer of record (asker or domain VP; Meaning Authority only if meaning changes); retained as reusable context for Frame and Verify.
+**Counter-claim**: author, statement, targeted claims, basis (unlinked evidence), why unlinked, proposed action; outcomes: *resolved by evidence*, *included* as a qualified claim, *rejected*, *deferred*; adjudicated by the reviewer of record (asker or domain VP; Meaning Authority only if meaning changes); retained as reusable context for Frame and Verify. **In v1 the reviewer of record dispositions counter-claims by hand.** *(v1.1:)* agent triage tries to link the basis to data and may spawn a test sub-mission.
 **Check library**: acceptance checks are reusable versioned assets tied to concepts/patterns; extended by the Builder from failures, review findings and counter-claims; basis of the eval sets.
 Confidence: leaf = min(verification pass fraction, evidence coverage, lowest dependent assertion confidence); parent = importance-weighted mean capped by the weakest critical child; shown with the reason it is limited. Review agreement rates are tracked per claim class and domain; the system may **propose** relaxing review for a class, only as a policy proposal that humans approve *(v1.2)*.
 
 ### 12. Answers, versions and rebuilds
-An **answer is an immutable, versioned asset**: Need Spec, definitions and versions used, facts and lineage, claim graph (story and values), confidence, decision record. Follow-ups reuse answers through ontology-addressed needs, not text search. When meaning changes: old answers stay **pinned** to the versions they used; affected retained models are marked **stale** and rebuilt lazily; readers of an old answer see "meaning changed since". A **human-triggered rebuild** creates **question version n+1** and a new answer, restarting from the earliest affected step (Clarify if meaning changed, Evidence if source data changed); the old answer stays linked. Questions raised in dialogue become child or sibling questions with their own Intent Record, answered immediately from existing assets when possible.
+An **answer is an immutable, versioned asset**: Need Spec, definitions and versions used, facts and lineage, claim graph (story and values), confidence, decision record. Follow-ups reuse answers through ontology-addressed needs, not text search. When meaning changes: old answers stay **pinned** to the versions they used; affected retained models are marked **stale** and rebuilt lazily; readers of an old answer see "meaning changed since". A **human-triggered rebuild** creates **question version n+1** and a new answer, restarting from the earliest affected step (Clarify if meaning changed, Evidence if source data changed); the old answer stays linked. Questions raised in dialogue become child or sibling questions with their own Intent Record, answered immediately from existing assets when possible *(v1.2)*.
 
 ### 13. The Builder and the flywheel
 **Trigger:** after every mission. **Roles (target):** Retrospective Analyst, Change Designer, Candidate Builder, Evaluator, Promoter, Policy Proposer, Eval Curator. **Separation of duties:** the Evaluator, Eval Curator, the Promoter's gate rules and the ledger are outside the Builder's reach and change only through a human-approved path. *(v1: Retrospective, Change Designer/Candidate Builder, Evaluator and Promoter as thin agents.)*
 - **Friction taxonomy** mined from handoffs (agents and humans): rework loops; information loss at handoff; redundant work; over- and under-escalation (including human overturns); agent disagreement; waste (tokens, time, queue wait); missing capability. Findings are attributed to handoffs and agent versions.
-- **Change types:** agent spec (ADK), skill, tool (sandboxed code), mapping, check, modelling pattern, workflow, and **policy proposals** (review, routing, thresholds, retention weights). Proposals touching human governance are only proposals that the relevant authority approves; agent changes pass the eval gate.
+- **Change types:** agent spec (ADK), skill, tool (sandboxed code), mapping, check, modelling pattern, workflow, and **policy proposals** (review, routing, thresholds, retention weights). Proposals touching human governance are only proposals that the relevant authority approves; agent changes pass the eval gate. *(v1: skills and checks.)*
+- **Baseline v0.** Baseline v0 is the **thin agents as first built, frozen under a tag**. v1 must also ship **one deliberately seeded deficiency** (for example, Discover not reusing source profiles) so the Builder has a real friction to find and fix.
 - **Hypothesis record** on every change: the friction targeted, the metric expected to move and by roughly how much, and the smallest evidence that would disprove it. After promotion the realised effect is measured; if the effect does not appear in the window, the change **rolls back automatically**.
-- **Eval design:** three sets — **Dev** (visible), **Promotion** (hidden), **Sealed** (operator/CI only); fresh world seeds; comparison with frozen **Baseline v0** on identical question sequences; divergence between Promotion and Sealed raises an alert. Gate: no regression on guarded metrics, better on at least one target metric within noise tolerance.
+- **Eval design.** v1 has two sets: **Dev** (visible to the Builder) is 10 cases spread across the five categories (identification, meaning, evidence, verification, answer) on three world seeds; **Promotion** (hidden from the Builder) is 10 different cases on three other seeds. A **Sealed** set (operator/CI only) and the Promotion-vs-Sealed divergence alert are **v2**. Fresh world seeds; comparison with frozen Baseline v0 on identical question sequences. Gate: no regression on guarded metrics, better on at least one target metric within noise tolerance.
 - **Guardrails (non-negotiable):** eval gate + rollback; read-only sources; spend caps with automatic halt; immutable hash-chained ledger and kill switch. The Builder cannot modify eval sets, the ledger, governance policies, the guardrails or its own gate.
 - **Escaping local minima** *(designed in; v1.2)*: an exploration budget for deliberately different candidates ("scouts", offline, normal gate), periodic fresh-eyes rebuilds of a step competing with the evolved one, plateau detection that permits larger offline changes, and diverse eval worlds. The smallest-change rule governs promotion into production; exploration happens off to the side.
-- **Compounding metrics** (computed from handoff and ledger data, always vs Baseline v0): (1) **rediscovery rate** (artefacts re-derived ÷ artefacts needed; reuse of lake or retained assets counts as reuse); (2) **eval pass-rate** (Promotion, and Sealed for audit; overall and per category: identification, meaning, evidence, verification, answer); (3) **human effort per mission** (clarifications, corrections, rejections, retries needing a human, minutes of human wait); (4) **cost and time per verified answer**. Change size (blast radius) is also tracked.
+- **Compounding metrics** (computed from handoff and ledger data, always vs Baseline v0): (1) **rediscovery rate** (artefacts re-derived ÷ artefacts needed; reuse of lake or retained assets counts as reuse); (2) **eval pass-rate** (Promotion; overall and per category); (3) **human effort per mission** (clarifications, corrections, rejections, retries needing a human, minutes of human wait); (4) **cost and time per verified answer**. Change size (blast radius) is also tracked. **v1 compounding criterion:** on a scripted sequence of five related questions, each of the four metrics beats Baseline v0 by **at least 20%** by the fifth question.
 
 ### 14. World model, sources and values data
-**World Model** (hidden, seeded, evolving): companies/plants, departments, suppliers, materials and families, contracts and prices, POs, receipts, invoices and credit notes, payments with dates, certifications, currencies and FX, fiscal calendars. **Planted drivers** for "Why is cost of goods rising?": supplier price increase, FX movement, mix/volume shift, and data artefacts (duplicate invoices, credit-note timing, one supplier under several identifiers). The **Answer Key** is the true decomposition plus the naive distortion. v1 world is tiny (hundreds of rows); seed and size are configurable.
+**World Model** (hidden, seeded, evolving): companies/plants, departments, suppliers, materials and families, contracts and prices, POs, receipts, invoices and credit notes, payments with dates, certifications, currencies and FX, fiscal calendars. **Each simulated SAP system is a lossy, convention-skewed view of this one world model**, and **org politics** appear as each department's own definition of "spend" and related terms. **Planted drivers** for "Why is cost of goods rising?": supplier price increase, FX movement, mix/volume shift, and data artefacts (duplicate invoices, credit-note timing, one supplier under several identifiers). The world generator plants **all four**. The **Answer Key** is the true decomposition plus the naive distortion. **v1 acceptance asserts the price driver and the duplicate-invoice artefact**; asserting FX and mix is v1.1. v1 world is tiny (hundreds of rows); seed and size are configurable.
 **Three SAP-style sims** named plainly (ECC 6.0, S/4HANA on-prem, S/4HANA Cloud), only public structures and synthetic data, non-affiliation disclaimer. All expose the same read-only **Connector interface** (list, describe, profile, sample, query, capability metadata).
-**Default values** (committed in the seed; the Values Authority may change them): *Fair dealing with suppliers* (on-time payment rate; payment terms vs standard; share of disputed invoices); *Cost discipline* (price variance; off-contract spend; unit-cost trend); *Supply resilience* (single-source share; supplier concentration; top-supplier share); *Integrity and control* (duplicate payment rate; spend without a PO; vendor-master duplicates); *Responsible sourcing* (certified-supplier share; spend by region of origin). The world model generates the data these indicators need.
+**Default values** (seeded as committed in v1; changing them through the Values Authority is v1.1): *Fair dealing with suppliers* (on-time payment rate; payment terms vs standard; share of disputed invoices); *Cost discipline* (price variance; off-contract spend; unit-cost trend); *Supply resilience* (single-source share; supplier concentration; top-supplier share); *Integrity and control* (duplicate payment rate; spend without a PO; vendor-master duplicates); *Responsible sourcing* (certified-supplier share; spend by region of origin). The world model generates the data these indicators need.
 *(v1.1)* A minimal simulated **existing lakehouse**: one curated supplier-spend model, a supplier hierarchy, one planted defect.
 
 ### 15. Architecture
-React front end; FastAPI back end with server-sent events; **Google ADK** agent definitions; **LiteLLM** gateway (any frontier or local open-weight model; BYO key; never logged); **LangGraph** durable workflows with Postgres checkpoints; Postgres (+pgvector) for state, catalogue, contracts, ontology, handoffs and ledger; DuckDB/Parquet lake behind the Lake Adapter; OpenTelemetry GenAI spans into our own schema (Phoenix optional profile); sandbox container (no network, read-only mounts, resource limits) for generated tools; `docker compose up`, one cloud VM (provider decided later); public Apache-2.0 monorepo with CI.
+React front end; FastAPI back end with server-sent events; **Google ADK** agent definitions; **LiteLLM** gateway (any frontier or local open-weight model; BYO key; never logged); **LangGraph** durable workflows with Postgres checkpoints; Postgres (+pgvector) for state, catalogue, contracts, ontology, handoffs and ledger; DuckDB/Parquet lake behind the Lake Adapter; OpenTelemetry GenAI spans into our own schema (Phoenix optional profile); sandbox container (no network, read-only mounts, resource limits) for generated tools; `docker compose up`, one cloud VM (provider decided later); public Apache-2.0 monorepo with CI. **The hosted instance accepts only the visitor's own key**, held for the session and never stored or logged.
 
 ### 16. UI surfaces
 Ask; question tree and mission board with "needs you" queues; Answer (per level, claim graph with values, lineage, follow-ups, decision record); governance queues (question, meaning workbench, mission approval, claim review with counter-claims); Builder (registry, proposals, hypotheses, promotions, rollbacks, ledger, kill switch); Metrics (four metrics vs baseline); Operator (sources, LLM providers, budgets, policies, storage space and cost); **Lineage view available for any graph in the product** (answers, claims, assertions, models, agent changes, question trees).
 
 ### 17. Security and safety (v1 posture)
 Synthetic data only; sources read-only; generated code sandboxed; spend caps; ledger; kill switch; secrets never written to traces; source data treated as untrusted text; sensitivity labels in contracts restrict reads by role and agent. Known residual risk: prompt injection via free text and sandbox escape are not adversarially tested in v1.
+**Non-functional targets:** v1 sets **no** latency, scale or availability targets beyond the spend caps and the "hundreds of rows" world; the first build's measurements inform targets in v1.1.
 
 ### 18. ADRs
 001 Agent runtime (ADK + LiteLLM + LangGraph) · 002 Observability (OTel → Postgres, Phoenix optional) · 003 Lake, catalogue, lineage store and table format · 004 Ontology representation and fuzzy commit model · 005 Sandbox · 006 Eval splits, baseline and hypothesis protocol · 007 Work tracking · 008 Stable core (addressing, contract schema, lineage format) and its migration path · 009 Open formats (OpenLineage, PROV-O, ontology export) · 010 Handoff schema and friction taxonomy.
@@ -203,23 +240,37 @@ Synthetic data only; sources read-only; generated code sandboxed; spend caps; le
 
 Good tests assert externally observable behaviour from a defined starting world, never prompts or agent wiring.
 **Primary seam (single): the backend HTTP API driven by scripted scenarios** against a seeded world, with recorded LLM cassettes in CI, a small local model for smoke evals and opt-in real-model evals with a BYO key. One Playwright smoke test for the UI. Unit tests only for pure logic (world-generator invariants and answer key, confidence and vote arithmetic, policy evaluation, ledger hash chain, contract validation).
+**Prior art:** none; the repository has no code yet.
 **Acceptance scenarios (v1):**
 1. *Cascade*: exec question → breakdown → governance edits and accepts → missions planned as minimal sub-missions and policy-routed.
 2. *Discover across three sims*, read-only (a write attempt is refused); source profiles retained and reused.
 3. *Resolve-before-create*: a second question reuses a retained definition and landed facts instead of re-deriving them; contract present and complete; lineage emitted as OpenLineage.
 4. *Spend conflict*: surfaced as a meaning mission; Meaning Authority ratifies; the committed assertion is reused automatically later.
-5. *Answer correctness*: decomposition matches the Answer Key within tolerance; naive artefact distortion detected; confidence reflects open assumptions.
-6. *Review*: claims routed to the right domain reviewers (including cross-domain claims); a counter-claim is raised and dispositioned; the answer is not released until every claim has a disposition; no provisional release.
+5. *Answer correctness*: each asserted driver's contribution (supplier price, duplicate-invoice artefact) lies **within 10% of the Answer Key**; **every planted duplicate invoice is detected and flagged**; confidence reflects open assumptions.
+6. *Review*: claims routed to the right domain reviewers (including cross-domain claims); a counter-claim is raised and dispositioned by hand; the answer is not released until every claim has a disposition; no provisional release.
 7. *Handoffs*: every agent and human action appears as a typed handoff with outcome linkage.
-8. *Flywheel*: the Builder proposes a change with a hypothesis; a worse candidate is rejected; a better one is promoted with a ledger entry; a deliberately failing hypothesis is rolled back; a candidate that games Dev but fails Promotion is not promoted; the Builder cannot alter eval sets, gate or ledger.
-9. *Guardrails*: spend cap halts a mission; kill switch halts all; ledger tamper is detectable; timeout escalation reminds and re-routes but decides nothing.
-10. *Compounding*: across a scripted question sequence the four metrics improve vs Baseline v0.
+8. *Flywheel*: the Builder proposes a change with a hypothesis against the seeded deficiency; a worse candidate is rejected; a better one is promoted with a ledger entry; a deliberately failing hypothesis is rolled back; a candidate that games Dev but fails Promotion is not promoted; the Builder cannot alter eval sets, gate or ledger.
+9. *Guardrails*: spend cap halts a mission; kill switch halts all; ledger tamper is detectable; a timed-out human item triggers a reminder and a re-route to the operator and decides nothing; a blocked mission spends no budget.
+10. *Compounding*: across a scripted sequence of five related questions each of the four metrics beats Baseline v0 by at least 20% by the fifth question.
 11. *Admin and lineage*: storage cost view and a lineage view resolve for an answer, a claim, an assertion and an agent change.
 12. *Spin-up*: `docker compose up` from a clean machine reaches healthy and a scenario passes.
 
+**Definition of done for v1:** acceptance scenarios 1 to 12 pass, with scenario 12 run on the cloud VM. The "days" timeline remains a stated risk, not a deliverable.
+
 ## Out of Scope (v1)
-Everything listed in ROADMAP.md under v1.1, v1.2 and v2; real SAP/production connectors; real customer data; writing to any source; multi-tenancy and billing; non-English UI.
+Everything listed in ROADMAP.md under v1.1, v1.2 and v2, including the items deferred by this draft (see the table in Further Notes); real SAP/production connectors; real customer data; writing to any source; multi-tenancy and billing; non-English UI.
 
 ## Further Notes
 **Demo script.** Exec asks "Why is cost of goods rising?" (decision: renegotiate or re-source?). The tree is accepted. A mission discovers across the three sims; "spend" becomes a meaning mission and is ratified. Evidence builds facts with contracts and lineage; Verify finds the duplicate-invoice and multi-vendor artefacts; domain reviewers dispose of their claims and one raises a counter-claim. The answer ships as a claim graph with values and confidence. The Builder proposes an improvement with a hypothesis, promotes it, then a bad candidate is rejected and a rollback demonstrated. A follow-up question is answered with less rediscovery and effort and lower cost than baseline.
-**Risks.** Scope vs "days" (the spine is mandatory); minimal security posture while the Builder generates code; SAP names used plainly (trademark risk, disclaimer included); autonomy depends on eval quality; LLM variance in evals; unknown unknowns (build and see what emerges). Recorded gap defaults: authority arbitration by Question Governance; estimate error as friction; agent failure handling; sensitivity labels; traceability of tickets and tests to stories and decisions.
+
+**Deferred by this draft (for ROADMAP.md)**
+
+| To | Item |
+|---|---|
+| v1.1 | Values Authority commit workflow; FX and mix driver assertions; remediation rules; counter-claim agent triage with test sub-missions |
+| v1.2 | Delegates and the full escalation chain; Dialogue Agent and multi-level follow-up routing; ontology purpose partition and Intent Record linking; per-domain data stewards |
+| v2 | Sealed eval set and the Promotion-vs-Sealed divergence alert |
+
+**Traceability.** Each backlog ticket lists the user stories and acceptance scenarios it satisfies. This lives in BACKLOG.md, not in this spec.
+
+**Risks.** Scope vs "days" (the spine is mandatory); minimal security posture while the Builder generates code; SAP names used plainly (trademark risk, disclaimer included); autonomy depends on eval quality; LLM variance in evals; unknown unknowns (build and see what emerges). Recorded gap defaults: authority arbitration by Question Governance; estimate error as friction; agent failure handling; sensitivity labels; traceability of tickets and tests to stories and decisions. Not yet quantified: the compounding and tolerance numbers (20%, 10%) are first guesses and should be revisited after the first build.
