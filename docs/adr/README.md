@@ -44,4 +44,7 @@ What this makes easier or harder, and how to reverse it.
 
 | ADR | Title | Status | Ticket |
 |---|---|---|---|
+| [0006](0006-eval-splits-baseline-and-hypothesis-protocol.md) | Eval splits, Baseline v0 and the hypothesis protocol | accepted | #9 |
+| [0007](0007-work-tracking.md) | Work tracking | accepted | #9 |
+| [0010](0010-handoff-schema-and-friction-taxonomy.md) | Handoff schema and friction taxonomy | accepted | #9 |
 | [0011](0011-autonomous-build-decisions-are-logged-as-adrs.md) | Autonomous build decisions are logged as ADRs | accepted | n/a |
