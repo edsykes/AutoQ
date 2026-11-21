@@ -44,4 +44,7 @@ What this makes easier or harder, and how to reverse it.
 
 | ADR | Title | Status | Ticket |
 |---|---|---|---|
+| [0001](0001-agent-runtime-adk-litellm-langgraph.md) | Agent runtime is Google ADK + LiteLLM + LangGraph | accepted | #6 |
+| [0002](0002-observability-otel-into-postgres.md) | Observability is OpenTelemetry spans into Postgres, Phoenix optional | accepted | #6 |
+| [0005](0005-sandbox-for-generated-code.md) | Generated code runs in a per-execution locked-down Docker container | accepted | #6 |
 | [0011](0011-autonomous-build-decisions-are-logged-as-adrs.md) | Autonomous build decisions are logged as ADRs | accepted | n/a |
