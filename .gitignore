@@ -4,3 +4,10 @@
 node_modules/
 __pycache__/
 convo.md
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.venv/
